@@ -60,11 +60,11 @@ var setLastDate = function (post) {
 var markupPosts = function (post) {
   var name = post.user.firstName + " " + post.user.lastName;
   var card = `<div class="card m-3">
-  <div class="card-body">
-  <h5 class="card-title"><span>${name}</span><span> said:</span></h5>
-  <p class="card-text">${post.message}</p>
-  </div>
-  </div>`;
+                <div class="card-body">
+                  <h5 class="card-title"><span>${name}</span><span> said:</span></h5>
+                  <p class="card-text">${post.message}</p>
+                </div>
+              </div>`;
   $("#feed").prepend(card);
 };
 
