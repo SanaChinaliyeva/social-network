@@ -17,7 +17,16 @@ var getProfile = function (url) {
 
 var editProfile = function (userInfo) {
   var profileUrl = baseUrl + "/profile";
-  $.post(profileUrl, userInfo);
+  if (userInfo.firstName && userInfo.lastName) {
+    $.ajax ({
+      url: profileUrl,
+      method: "POST",
+      data: userInfo,
+      success: function () {
+        $("#editModal").modal("hide");
+      }
+    });
+  }
 };
 
 var showProfile = function (user) {
@@ -91,6 +100,11 @@ var subscribe = function (email) {
   });
 };
 
+var updatePosts = function () {
+  getPosts()
+  .then(renderPosts);
+};
+
 $("#editProfile").on("submit", function (e) {
   e.preventDefault();
   var form = this;
@@ -106,6 +120,7 @@ $("#sendPost").on("submit", function (e) {
   var form = this;
   var post = convertFormToObj(this);
   sendPost(post);
+  updatePosts();
   clearForm(this);
 });
 
@@ -113,8 +128,13 @@ $("#subscribeForm").on("submit", function (e) {
  e.preventDefault();
  var form = this;
  var email = convertFormToObj(this);
- subscribe(email);
- clearForm(this);
+ if (email.email) {
+   subscribe(email);
+   updatePosts();
+   clearForm(this);
+ } else {
+  alert("Enter valid email");
+}
 });
 
 getProfile(baseUrl + "/profile")
@@ -122,7 +142,4 @@ getProfile(baseUrl + "/profile")
 .then(getPosts)
 .then(renderPosts);
 
-setInterval(function() {
-  getPosts()
-  .then(renderPosts);
-}, 5000);
+setInterval(updatePosts, 5000);
