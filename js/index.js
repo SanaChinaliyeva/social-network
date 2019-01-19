@@ -61,3 +61,9 @@ getProfile(baseUrl + "/profile")
 .then(showProfile)
 .then(getPosts)
 .then(showPosts);
+
+setInterval(function() {
+  getPosts()
+  .then(showPosts)
+}, 5000);
+
