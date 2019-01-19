@@ -1,4 +1,4 @@
-var email = "lolo@pepe.com";
+var email = "john@doe.com";
 var lastDate = "";
 var baseUrl = "http://146.185.154.90:8000/blog/" + email;
 
@@ -33,37 +33,70 @@ $("#editProfile").on("submit", function (e) {
 });
 
 var getPosts = function () {
-  var url = baseUrl + "/posts";
-  var posts = getProfile(url);
-  console.log(posts);
-  return posts;
+  if (lastDate) {
+    var dateUrl = baseUrl + "/posts?datetime=" + lastDate; 
+  } else {
+    var dateUrl = baseUrl + "/posts";
+  }
+  return getProfile(dateUrl);
+};
+
+var getLastPost = function (posts) {
+  if(posts.length) {
+    var lastIndex = posts.length-1;
+    return posts[lastIndex];
+  }
+};
+
+var setLastDate = function (post) {
+  if (post) {
+    lastDate = post.datetime;
+  }
 };
 
 var markupPosts = function (post) {
   var name = post.user.firstName + " " + post.user.lastName;
   var card = `<div class="card">
-                <div class="card-body">
-                  <h5 class="card-title"><span>${name}</span><span> said:</span></h5>
-                  <p class="card-text">${post.message}</p>
-                </div>
-              </div>`;
+  <div class="card-body">
+  <h5 class="card-title"><span>${name}</span><span> said:</span></h5>
+  <p class="card-text">${post.message}</p>
+  </div>
+  </div>`;
   $("#feed").prepend(card);
 };
 
-var showPosts = function (posts) {
+var renderPosts = function (posts) {  
+  var lastPost = getLastPost(posts);
+  setLastDate(lastPost);  
   for (var post of posts) {
     markupPosts(post);
   }
   return posts;
 };
 
+var sendPost = function (post) {
+  var url = baseUrl + "/posts"
+  $.post(url, post);
+};
+
+var clearForm = function () {
+  $("#message").val("");
+};
+
+$("#sendPost").on("submit", function (e) {
+  e.preventDefault();
+  var form = this;
+  var post = convertFormToObj(this);
+  sendPost(post);
+  clearForm();
+});
+
 getProfile(baseUrl + "/profile")
 .then(showProfile)
 .then(getPosts)
-.then(showPosts);
+.then(renderPosts);
 
 setInterval(function() {
   getPosts()
-  .then(showPosts)
+  .then(renderPosts);
 }, 5000);
-
