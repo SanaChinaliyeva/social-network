@@ -26,16 +26,6 @@ var showProfile = function (user) {
   return user;
 };
 
-$("#editProfile").on("submit", function (e) {
-  e.preventDefault();
-  var form = this;
-  var userInfo = convertFormToObj(this);
-  editProfile(userInfo);
-  getProfile(baseUrl + "/profile")
-  .then(showProfile);
-  clearForm(this);
-});
-
 var getPosts = function () {
   if (lastDate) {
     var dateUrl = baseUrl + "/posts?datetime=" + lastDate; 
@@ -60,7 +50,7 @@ var setLastDate = function (post) {
 
 var markupPosts = function (post) {
   var name = post.user.firstName + " " + post.user.lastName;
-  var card = `<div class="card">
+  var card = `<div class="card m-3">
   <div class="card-body">
   <h5 class="card-title"><span>${name}</span><span> said:</span></h5>
   <p class="card-text">${post.message}</p>
@@ -89,6 +79,28 @@ var clearForm = function (form) {
   $(formInputs).val("");
 };
 
+var subscribe = function (email) {
+  var url = baseUrl + "/subscribe";
+  $.ajax ({
+    url,
+    method: "POST",
+    data: email,
+    success: function () {
+      $("#subscribeModal").modal("hide");
+    }
+  });
+};
+
+$("#editProfile").on("submit", function (e) {
+  e.preventDefault();
+  var form = this;
+  var userInfo = convertFormToObj(this);
+  editProfile(userInfo);
+  getProfile(baseUrl + "/profile")
+  .then(showProfile);
+  clearForm(this);
+});
+
 $("#sendPost").on("submit", function (e) {
   e.preventDefault();
   var form = this;
@@ -96,11 +108,6 @@ $("#sendPost").on("submit", function (e) {
   sendPost(post);
   clearForm(this);
 });
-
-var subscribe = function (email) {
-  var url = baseUrl + "/subscribe";
-  $.post(url, email);
-};
 
 $("#subscribeForm").on("submit", function (e) {
  e.preventDefault();
