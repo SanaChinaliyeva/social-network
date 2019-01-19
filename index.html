@@ -46,7 +46,7 @@
           </div>
         </div>
       </div>
-      <button id="subscribe" class="btn btn-outline-info" data-toggle="modal" data-target="#subscribeModal"><i class="fas fa-user-plus mr-2"></i>Follow user</button>
+      <button id="subscribe" type="submit" class="btn btn-outline-info" data-toggle="modal" data-target="#subscribeModal"><i class="fas fa-user-plus mr-2"></i>Follow user</button>
       <div class="modal fade" id="subscribeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -57,7 +57,7 @@
                 </button>
               </div>
               <div class="modal-body">
-                <form>
+                <form id="subscribeForm">
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
                       <span class="input-group-text" id="inputGroup-sizing-default">E-mail</span>
@@ -66,7 +66,7 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" id="editUserBtn">Save changes</button>
+                    <button type="submit" class="btn btn-primary" id="subscribe">Subscribe</button>
                   </div>
                 </form>
               </div>

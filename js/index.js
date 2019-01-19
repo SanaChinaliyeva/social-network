@@ -16,7 +16,8 @@ var getProfile = function (url) {
 };
 
 var editProfile = function (userInfo) {
-  $.post(baseUrl, userInfo);
+  var profileUrl = baseUrl + "/profile";
+  $.post(profileUrl, userInfo);
 };
 
 var showProfile = function (user) {
@@ -30,6 +31,9 @@ $("#editProfile").on("submit", function (e) {
   var form = this;
   var userInfo = convertFormToObj(this);
   editProfile(userInfo);
+  getProfile(baseUrl + "/profile")
+  .then(showProfile);
+  clearForm(this);
 });
 
 var getPosts = function () {
@@ -79,8 +83,10 @@ var sendPost = function (post) {
   $.post(url, post);
 };
 
-var clearForm = function () {
-  $("#message").val("");
+var clearForm = function (form) {
+  var formId = form.id;
+  var formInputs = "#" + formId + " input";
+  $(formInputs).val("");
 };
 
 $("#sendPost").on("submit", function (e) {
@@ -88,7 +94,20 @@ $("#sendPost").on("submit", function (e) {
   var form = this;
   var post = convertFormToObj(this);
   sendPost(post);
-  clearForm();
+  clearForm(this);
+});
+
+var subscribe = function (email) {
+  var url = baseUrl + "/subscribe";
+  $.post(url, email);
+};
+
+$("#subscribeForm").on("submit", function (e) {
+ e.preventDefault();
+ var form = this;
+ var email = convertFormToObj(this);
+ subscribe(email);
+ clearForm(this);
 });
 
 getProfile(baseUrl + "/profile")
